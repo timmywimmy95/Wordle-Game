@@ -16,7 +16,7 @@ $(() => {
     const body = $('body');
 
     body.append(
-      "<div class='start-page' id='start-page'>Choose a Category</div>"
+      "<div class='start-page animate__animated animate__fadeIn' id='start-page'>Choose a Category</div>"
     );
 
     //Create Game Category List
@@ -61,7 +61,6 @@ $(() => {
     let attempt = 0;
     let triesLeft = 6;
     let board = $('.board');
-    console.log(word);
     document.addEventListener('keydown', keyPressed);
 
     function backspace(e) {
@@ -85,17 +84,21 @@ $(() => {
         userAnswer.forEach((letter, index) => {
           // correct position & letter
           if (letter === answer[index]) {
-            $(`#${index}.letter[data-state='active']`).toggleClass('correct');
+            $(`#${index}.letter[data-state='active']`)
+              .toggleClass('correct')
+              .addClass('animate__animated animate__flipInX');
           }
           // wrong position correct letter
           else if (answer.includes(letter)) {
-            $(`#${index}.letter[data-state='active']`).toggleClass(
-              'half-correct'
-            );
+            $(`#${index}.letter[data-state='active']`)
+              .toggleClass('half-correct')
+              .addClass('animate__animated animate__flipInX');
           }
           // wrong position wrong letter
           else {
-            $(`#${index}.letter[data-state='active']`).toggleClass('wrong');
+            $(`#${index}.letter[data-state='active']`)
+              .toggleClass('wrong')
+              .addClass('animate__animated animate__flipInX');
           }
         });
 
@@ -150,12 +153,11 @@ $(() => {
         let lastIndex = userGuess.length - 1;
         let az = /^[a-z]$/;
         if (az.test(e.key)) {
-          console.log(e.key);
           userGuess.splice(lastIndex, 1, e.key);
           let letterDiv = $(`#${lastIndex}.letter[data-state='active']`);
+          letterDiv.addClass('animate__animated animate__headShake');
           letterDiv.text(e.key);
           userGuess.push('');
-          console.log(userGuess);
         }
       }
     }
