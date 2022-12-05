@@ -1,16 +1,16 @@
 $(() => {
-  //Creating First Page
   const categories = {
     news: ['today'],
     coffee: ['grind', 'water', 'steam'],
     random: ['watch', 'spray'],
   };
-
+  //Randomises the word chosen after category is selected (clicked by user)
   const wordRandomizer = (arr) => {
     let rand = Math.floor(Math.random() * arr.length);
     return arr[rand].toUpperCase();
   };
 
+  //Creating First Page
   const startPage = (categories) => {
     $('.board').remove();
     const body = $('body');
@@ -54,6 +54,7 @@ $(() => {
     });
   };
 
+  //All typing functions (backspace, enter, listening for keyboard press)
   const userTyping = (word) => {
     let userGuess = [''];
     let userWin = false;
@@ -64,15 +65,17 @@ $(() => {
     document.addEventListener('keydown', keyPressed);
 
     function backspace(e) {
-      if (userGuess)
-        if (e.key === 'Backspace') {
-          let lastIndex = userGuess.length - 2;
-          userGuess.splice(lastIndex, 1);
-          console.log(userGuess);
-          let letterDiv = $(`#${lastIndex}.letter[data-state='active']`);
-          letterDiv.text('');
-          return;
-        }
+      if (JSON.stringify([userGuess[0]]) === JSON.stringify([''])) {
+        return;
+      }
+      if (e.key === 'Backspace') {
+        let lastIndex = userGuess.length - 2;
+        userGuess.splice(lastIndex, 1);
+        console.log(userGuess);
+        let letterDiv = $(`#${lastIndex}.letter[data-state='active']`);
+        letterDiv.text('');
+        return;
+      }
     }
     function enter(e) {
       if (e.key === 'Enter') {
