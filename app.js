@@ -1,7 +1,7 @@
 $(() => {
   const categories = {
     news: ['today'],
-    coffee: ['grind', 'water', 'steam'],
+    coffee: ['grind', 'latte', 'mocha'],
     random: ['watch', 'spray'],
   };
   //Randomises the word chosen after category is selected (clicked by user)
