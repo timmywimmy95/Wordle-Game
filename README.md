@@ -12,6 +12,14 @@ Wordle gives players six chances to guess a randomly selected five-letter word. 
 ## Features 
 
 - Auto-generating rows after a guess submission
+- Show total elapsed time
+
+## Updates to be Made
+
+- Log user score
+- Log each attempt's elapsed time
+- Pull a word from a word API generator
+- Show highscore in terms of shortest to longest elapsed time
 
 ## Acknowledgements
 
