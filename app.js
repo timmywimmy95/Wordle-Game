@@ -1,4 +1,7 @@
 $(() => {
+  let counter = 0;
+  let timerInterval;
+
   const categories = {
     news: ['today'],
     coffee: ['grind', 'latte', 'mocha'],
@@ -13,7 +16,11 @@ $(() => {
   //Creating First Page
   const startPage = (categories) => {
     $('.board').remove();
+    $('.timer').remove();
     const body = $('body');
+    $('header').append(
+      `<h1 id="title"class="animate__animated animate__slideInDown">Wrodle</h1>`
+    );
 
     body.append(
       "<div class='start-page animate__animated animate__fadeIn' id='start-page'>Choose a Category</div>"
@@ -34,9 +41,52 @@ $(() => {
       let categorySelected = e.currentTarget.innerText;
       let arr = categories[categorySelected.toLowerCase()];
       let word = wordRandomizer(arr);
+      let counter = 0;
+      const clock = () => {
+        counter++;
+        let min = Math.floor(counter / 60);
+        let sec = counter % 60;
+        let minDOM = $('.mins');
+        let secDom = $('.secs');
 
+        //seconds less than 10, min less than 10
+        if (counter % 60 < 10 && min < 10) {
+          secDom.text(`0${sec}`);
+          minDOM.text(`0${min}`);
+          console.log(min, sec, 'case 1');
+        }
+        // seconds more than 9, min less than 10
+        else if (counter % 60 > 9 && min < 10) {
+          secDom.text(`${sec}`);
+          minDOM.text(`0${min}`);
+          console.log(min, sec, 'case 2');
+        }
+        // seconds more than 9, min is more than 9
+        else if (counter % 60 > 9 && min > 9) {
+          secDom.text(`${sec}`);
+          minDOM.text(`${min}`);
+          console.log(min, sec, 'case 3');
+        }
+        // seconds less than 10, min is more than 9
+        else if (counter % 60 < 10 && min > 9) {
+          secDom.text(`0${sec}`);
+          minDOM.text(`${min}`);
+          console.log(min, sec, 'case 4');
+        }
+      };
+
+      timerInterval = setInterval(clock, 1000);
       // Empty out page
       $('#start-page').remove();
+      // Remove Wordle Title
+      $('#title').remove();
+      // Replace Timer @ Wordle Title Position
+
+      let timer = $(
+        `<h2 class="animate__animated animate__slideInDown timer"><span class="mins">00</span>:<span class="secs">00</span></h2>`
+      );
+      $('#title').remove();
+      $('header').append(timer);
 
       // Show game board with hidden selected word
       const body = $('body');
@@ -61,6 +111,7 @@ $(() => {
     let attempt = 0;
     let triesLeft = 6;
     let board = $('.board');
+
     document.addEventListener('keydown', keyPressed);
 
     function backspace(e) {
@@ -131,12 +182,14 @@ $(() => {
         //Check for win or lose scenario
         if (attempt < 6 && userWin === true) {
           board.append("<h2 class='start-page'>You scored a point today!</h2>");
+          clearInterval(timerInterval);
           setTimeout(() => {
             startPage(categories);
           }, 3000);
           document.removeEventListener('keydown', keyPressed);
         } else if (attempt === 6 && userWin === false) {
           board.append("<h2 class='start-page'>Try again tomorrow!</h2>");
+          clearInterval(timerInterval);
           setTimeout(() => {
             startPage(categories);
           }, 3000);
