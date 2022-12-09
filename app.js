@@ -1,46 +1,49 @@
 $(() => {
-  let counter = 0;
   let timerInterval;
 
-  const categories = {
-    news: ['today'],
-    coffee: ['grind', 'latte', 'mocha'],
-    random: ['watch', 'spray'],
-  };
-  //Randomises the word chosen after category is selected (clicked by user)
-  const wordRandomizer = (arr) => {
-    let rand = Math.floor(Math.random() * arr.length);
-    return arr[rand].toUpperCase();
-  };
-
-  //Creating First Page
+  //Creating Start Page
   const startPage = (categories) => {
+    // remove game board and timer class elements if it is present
     $('.board').remove();
     $('.timer').remove();
+
+    // Appends Wordle Title to Body
     const body = $('body');
     $('header').append(
       `<h1 id="title"class="animate__animated animate__slideInDown">Wrodle</h1>`
     );
 
+    // Appends "Choose a Category" below the horizontal line element <hr>
     body.append(
       "<div class='start-page animate__animated animate__fadeIn' id='start-page'>Choose a Category</div>"
     );
 
-    //Create Game Category List
+    //Display Game Category List
+    // const categories = {
+    //   news: ['today'],
+    //   coffee: ['grind', 'latte', 'mocha'],
+    //   random: ['watch', 'spray'],
+    // };
+    //key, value
     for (const [category, words] of Object.entries(categories)) {
       $('#start-page').append(
         $(
           `<div class="start-page category">${
+            //First letter uppercase, other letters lowercase
             category[0].toUpperCase() + category.slice(1).toLowerCase()
           }</div>`
         )
       );
     }
+
+    // When user clicks on the selected category
     $('.category').click((e) => {
-      e.preventDefault();
       let categorySelected = e.currentTarget.innerText;
       let arr = categories[categorySelected.toLowerCase()];
+      //Selects a random word from the category array
       let word = wordRandomizer(arr);
+
+      // start timer at 0
       let counter = 0;
       const clock = () => {
         counter++;
@@ -74,8 +77,8 @@ $(() => {
           console.log(min, sec, 'case 4');
         }
       };
-
       timerInterval = setInterval(clock, 1000);
+
       // Empty out page
       $('#start-page').remove();
       // Remove Wordle Title
@@ -93,18 +96,18 @@ $(() => {
       let board = $(`<div class="board"></div>`);
       body.append(board);
 
+      //Appends the first row of hidden words and sets it to active.
       board.append($("<div data-state='active' class='guess'></div>"));
       let guess = $(".guess[data-state='active']");
-
+      //Create an individual box for each letter of the word
       word.split('').forEach((letter, i) => {
         guess.append(`<div data-state='active' class=letter id=${i}></div>`);
       });
+      // Start listening for user typing actions
       userTyping(word);
-      // userSubmit();
     });
   };
 
-  //All typing functions (backspace, enter, listening for keyboard press)
   const userTyping = (word) => {
     let userGuess = [''];
     let userWin = false;
@@ -118,10 +121,12 @@ $(() => {
       if (JSON.stringify([userGuess[0]]) === JSON.stringify([''])) {
         return;
       }
+      // Listening for backspace press
       if (e.key === 'Backspace') {
+        // ["t", "o", "d", ""]
         let lastIndex = userGuess.length - 2;
         userGuess.splice(lastIndex, 1);
-        console.log(userGuess);
+        // console.log(userGuess);
         let letterDiv = $(`#${lastIndex}.letter[data-state='active']`);
         letterDiv.text('');
         return;
@@ -131,6 +136,8 @@ $(() => {
       if (e.key === 'Enter') {
         let userAnswer = userGuess.slice(0, 5);
         let answer = word.toLowerCase().split('');
+        // console.log(userAnswer);
+        // console.log(answer);
 
         userAnswer.forEach((letter, index) => {
           // correct position & letter
@@ -153,6 +160,7 @@ $(() => {
           }
         });
 
+        // Disable the row & letters after answer is submitted
         let currentDiv = $(".guess[data-state='active']");
         currentDiv.attr('data-state', 'disabled');
         currentDiv.find('.letter').attr('data-state', 'disabled');
@@ -165,7 +173,7 @@ $(() => {
         } else {
           userWin = false;
         }
-
+        // If user has less than 6 tries, print new row and hidden letters. Activate new row and hidden letters
         if (attempt < 6 && userWin === false) {
           board.append(
             $(`<div data-state='active' class='guess' id=${attempt}></div>`)
@@ -178,11 +186,13 @@ $(() => {
             );
           });
         }
-
         //Check for win or lose scenario
         if (attempt < 6 && userWin === true) {
+          // Print win message in DOM
           board.append("<h2 class='start-page'>You scored a point today!</h2>");
+          // Stop timer
           clearInterval(timerInterval);
+          // Wait for 3 seconds before returning to start screen
           setTimeout(() => {
             startPage(categories);
           }, 3000);
@@ -207,9 +217,12 @@ $(() => {
         let az = /^[a-z]$/;
         if (az.test(e.key)) {
           userGuess.splice(lastIndex, 1, e.key);
+          // Looks for the last active empty letter the DOM
           let letterDiv = $(`#${lastIndex}.letter[data-state='active']`);
           letterDiv.addClass('animate__animated animate__headShake');
+          // Add new letter to DOM
           letterDiv.text(e.key);
+          // Push an empty string into userGuess so that it can be used as an anchor for splicing for the next character
           userGuess.push('');
         }
       }
@@ -220,6 +233,16 @@ $(() => {
       enter(e);
     }
   };
-
+  const categories = {
+    news: ['today'],
+    coffee: ['grind', 'latte', 'mocha'],
+    random: ['watch', 'spray'],
+  };
+  //Randomises the word chosen after category is selected (clicked by user)
+  const wordRandomizer = (arr) => {
+    let rand = Math.floor(Math.random() * arr.length);
+    return arr[rand].toUpperCase();
+  };
+  //All typing functions (backspace, enter, listening for keyboard press)
   startPage(categories);
 });
