@@ -56,25 +56,25 @@ $(() => {
         if (counter % 60 < 10 && min < 10) {
           secDom.text(`0${sec}`);
           minDOM.text(`0${min}`);
-          console.log(min, sec, 'case 1');
+          // console.log(min, sec, 'case 1');
         }
         // seconds more than 9, min less than 10
         else if (counter % 60 > 9 && min < 10) {
           secDom.text(`${sec}`);
           minDOM.text(`0${min}`);
-          console.log(min, sec, 'case 2');
+          // console.log(min, sec, 'case 2');
         }
         // seconds more than 9, min is more than 9
         else if (counter % 60 > 9 && min > 9) {
           secDom.text(`${sec}`);
           minDOM.text(`${min}`);
-          console.log(min, sec, 'case 3');
+          // console.log(min, sec, 'case 3');
         }
         // seconds less than 10, min is more than 9
         else if (counter % 60 < 10 && min > 9) {
           secDom.text(`0${sec}`);
           minDOM.text(`${min}`);
-          console.log(min, sec, 'case 4');
+          // console.log(min, sec, 'case 4');
         }
       };
       timerInterval = setInterval(clock, 1000);
