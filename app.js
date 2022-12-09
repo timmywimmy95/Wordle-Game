@@ -107,7 +107,6 @@ $(() => {
       userTyping(word);
     });
   };
-
   const userTyping = (word) => {
     let userGuess = [''];
     let userWin = false;
