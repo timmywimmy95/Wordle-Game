@@ -21,6 +21,19 @@ Wordle gives players six chances to guess a randomly selected five-letter word. 
 - Log each attempt's elapsed time
 - Pull a word from a word API generator
 - Show highscore in terms of shortest to longest elapsed time
+- Mobile Key Listeners
+- Media query for different screen sizes
+
+## Motivations Behind The Game
+- To get a better understanding of how the DOM and JS data structures interact
+- Work on a project containing event listeners (especially key presses)
+
+## Technologies Used
+- Animate.css
+- HTML
+- Javascript
+- CSS
+- JQuery
 
 ## Acknowledgements
 
